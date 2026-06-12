@@ -18,9 +18,9 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
              style="background: radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%)"></div>
       </div>
 
-      <!-- Large Background Outline Typography -->
+      <!-- Outline background Typography -->
       <div
-        class="absolute left-[-15%] top-1/3 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute left-[-15%] top-1/3 outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * -1.0) + 'px, 0, 0)'"
       >
         EXPERTISE

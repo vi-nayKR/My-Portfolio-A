@@ -17,9 +17,9 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
         style="background: radial-gradient(ellipse, rgba(99,102,241,0.07) 0%, transparent 70%)"
       ></div>
 
-      <!-- Large Background Outline Typography -->
+      <!-- Outline background Typography -->
       <div
-        class="absolute right-[-10%] bottom-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute right-[-10%] bottom-10 outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * -1.1) + 'px, 0, 0)'"
       >
         CONNECT
@@ -109,7 +109,7 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
                 <label class="block text-xs text-muted font-mono uppercase tracking-wider mb-2">Message</label>
                 <textarea
                   [(ngModel)]="form.message" name="message"
-                  rows="5"
+                  rows="11"
                   placeholder="Tell me about the project or opportunity..."
                   class="w-full px-4 py-3 rounded-xl bg-surface/40 border border-border/80 text-frost placeholder:text-muted/50 text-sm focus:outline-none focus:border-accent/60 transition-colors resize-none"
                 ></textarea>
@@ -200,11 +200,47 @@ export class ContactComponent implements OnInit {
   }
 
   submitForm() {
-    if (!this.form.name || !this.form.email) return;
+    if (!this.form.name || !this.form.email || !this.form.message) return;
     this.submitted.set(true);
-    setTimeout(() => {
-      this.form = { name: '', email: '', message: '' };
+
+    const accessKey = 'YOUR_WEB3FORMS_ACCESS_KEY'; // Replace this with your free access key from https://web3forms.com/
+
+    if (accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+      console.warn('Please set your Web3Forms access key to receive form emails.');
+      // Local testing success fallback
+      setTimeout(() => {
+        this.form = { name: '', email: '', message: '' };
+        this.submitted.set(false);
+      }, 3000);
+      return;
+    }
+
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        access_key: accessKey,
+        name: this.form.name,
+        email: this.form.email,
+        message: this.form.message,
+        subject: `New Portfolio Message from ${this.form.name}`
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        this.form = { name: '', email: '', message: '' };
+      } else {
+        console.error('Email submission failed:', data.message);
+      }
       this.submitted.set(false);
-    }, 4000);
+    })
+    .catch(error => {
+      console.error('Error submitting contact form:', error);
+      this.submitted.set(false);
+    });
   }
 }

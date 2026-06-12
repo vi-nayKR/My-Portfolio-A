@@ -16,7 +16,7 @@ import { TiltDirective } from '../../directives/tilt.directive';
 
       <!-- Large Outline Parallax Text -->
       <div
-        class="absolute right-[-5%] top-[25%] outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute right-[-5%] top-[25%] outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * -1.3) + 'px, 0, 0)'"
       >
         DAILY DRIVER
@@ -97,34 +97,6 @@ import { TiltDirective } from '../../directives/tilt.directive';
 
           <!-- Right Content: Desk & Wallpaper Showcase (5 columns) -->
           <div class="md:col-span-5 space-y-6">
-            <!-- Wallpaper Card -->
-            <div
-              appTilt
-              [maxTilt]="6"
-              [scale]="1.03"
-              [glowColor]="'rgba(255, 0, 127, 0.15)'"
-              class="apple-glass rounded-2xl overflow-hidden border border-[#ff007f]/20 p-3 bg-void/50 cursor-pointer shadow-xl relative group"
-            >
-              <div class="relative overflow-hidden rounded-xl aspect-[16/9]">
-                <img
-                  src="garuda-linux.jpg"
-                  alt="Garuda Dr460nized Linux Eagle Wallpaper"
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div class="mt-3 p-1 flex items-center justify-between">
-                <div>
-                  <h4 class="text-xs font-bold text-frost">Garuda Eagle Wallpaper</h4>
-                  <p class="text-[9px] text-muted font-mono mt-0.5">Signature neon eagle visual theme</p>
-                </div>
-                <div class="w-6 h-6 rounded-full bg-[#ff007f]/10 flex items-center justify-center border border-[#ff007f]/20">
-                  <svg class="w-3.5 h-3.5 text-[#ff007f]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                  </svg>
-                </div>
-              </div>
-            </div>
-
             <!-- Setup Card -->
             <div
               appTilt
@@ -133,7 +105,7 @@ import { TiltDirective } from '../../directives/tilt.directive';
               [glowColor]="'rgba(255, 107, 0, 0.15)'"
               class="apple-glass rounded-2xl overflow-hidden border border-border/30 p-3 bg-void/50 cursor-pointer shadow-xl relative group"
             >
-              <div class="relative overflow-hidden rounded-xl h-48 md:h-56">
+              <div class="relative overflow-hidden rounded-xl h-64 md:h-96">
                 <img
                   src="desk-setup.png"
                   alt="Vinay Desk Setup with Garuda Linux"

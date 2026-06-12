@@ -29,7 +29,7 @@ interface GameInfo {
 
       <!-- Large Outline Parallax Text -->
       <div
-        class="absolute left-[-5%] top-[15%] outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute left-[-5%] top-[15%] outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * 1.3) + 'px, 0, 0)'"
       >
         PLAYGROUND
@@ -152,6 +152,58 @@ interface GameInfo {
           </div>
         </div>
 
+        <!-- Photography Row -->
+        <div class="grid md:grid-cols-12 gap-8 items-center mt-16 pt-16 border-t border-border/20"
+             [style.opacity]="visible() ? '1' : '0'"
+             [style.transform]="visible() ? 'translateY(0)' : 'translateY(30px)'"
+             style="transition: opacity 0.8s, transform 0.8s; transition-delay: 0.1s;">
+          
+           <!-- Left Content: Photograph (6 columns) -->
+          <div class="md:col-span-6 relative group">
+            <div
+              appTilt
+              [maxTilt]="6"
+              [scale]="1.03"
+              class="apple-glass rounded-2xl overflow-hidden border border-border/30 p-3 bg-void/50 cursor-pointer shadow-xl relative"
+            >
+              <div class="relative overflow-hidden rounded-xl h-64 md:h-[300px]">
+                <img
+                  src="photography-pool.jpg"
+                  alt="Poolside photography by Vinay"
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+              <div class="mt-3 p-1 flex items-center justify-between">
+                <div>
+                  <h4 class="text-xs font-bold text-frost">Poolside Symphony</h4>
+                  <p class="text-[9px] text-muted font-mono mt-0.5">Shot by Vinay — Natural Light & Reflection</p>
+                </div>
+                <div class="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center border border-accent/20">
+                  <svg class="w-3.5 h-3.5 text-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Content: Text Description (6 columns) -->
+          <div class="md:col-span-6 space-y-4 text-left">
+            <div>
+              <p class="text-accent font-mono text-xs tracking-widest uppercase mb-2">Visual Inspirations</p>
+              <h3 class="text-2xl md:text-3xl font-display font-bold text-frost leading-tight">
+                Capturing Perspectives through the <span class="gradient-text">Lens</span>
+              </h3>
+            </div>
+            <p class="text-muted text-sm leading-relaxed">
+              When I step away from compiling code or refining interfaces, I find myself looking at the world through a camera lens. Photography is my creative escape—a way to freeze-frame geometry, balance, and light. 
+            </p>
+            <p class="text-muted text-sm leading-relaxed">
+              Whether it's capturing the calm reflections of a pool against a vast blue sky, discovering architectural lines, or exploring street symmetry, it keeps my details-oriented mind sharp. I believe a good eye for composition in photography translates directly into cleaner UI design and structured software architecture.
+            </p>
+          </div>
+        </div>
 
       </div>
     </section>

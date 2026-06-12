@@ -17,13 +17,13 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 
       <!-- Outline background texts -->
       <div
-        class="absolute right-[-10%] top-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute right-[-10%] top-10 outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * -1.2) + 'px, 0, 0)'"
       >
         ARCHITECTURE
       </div>
       <div
-        class="absolute left-[-10%] bottom-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute left-[-10%] bottom-10 outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * 1.2) + 'px, 0, 0)'"
       >
         SYSTEMS
@@ -74,14 +74,38 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
                 [scale]="1.02"
                 class="p-5 rounded-xl apple-glass card-hover"
               >
-                <div class="flex items-start gap-4">
-                  <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
-                    <span [innerHTML]="card.icon | safeHtml" class="text-accent"></span>
+                <div class="flex items-start gap-4 justify-between">
+                  <div class="flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                      <span [innerHTML]="card.icon | safeHtml" class="text-accent"></span>
+                    </div>
+                    <div>
+                      <h3 class="font-semibold text-frost mb-1">{{ card.title }}</h3>
+                      <p class="text-sm text-muted leading-relaxed">{{ card.desc }}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 class="font-semibold text-frost mb-1">{{ card.title }}</h3>
-                    <p class="text-sm text-muted leading-relaxed">{{ card.desc }}</p>
-                  </div>
+                  @if (card.image) {
+                    <div
+                      class="relative overflow-hidden rounded-xl border border-border bg-void w-16 md:w-20 aspect-[1/1.414] cursor-pointer group/edu-img shadow-lg shrink-0"
+                      (click)="openCertificate(card.link)"
+                    >
+                      <img
+                        [src]="card.image"
+                        [alt]="card.title"
+                        class="w-full h-full object-cover object-top transition-transform duration-500 group-hover/edu-img:scale-105"
+                        loading="lazy"
+                      />
+                      <!-- Hover overlay indicating view -->
+                      <div class="absolute inset-0 bg-void/60 opacity-0 group-hover/edu-img:opacity-100 flex items-center justify-center transition-opacity duration-300">
+                        <span class="px-1.5 py-0.5 rounded bg-accent text-frost text-[8px] font-semibold flex items-center gap-0.5 shadow-lg">
+                          <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                          </svg>
+                          View
+                        </span>
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             }
@@ -107,6 +131,8 @@ export class AboutComponent implements OnInit {
       title: 'Education',
       icon: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>',
       desc: 'B.E. Computer Science — Siddaganga Institute of Technology, CGPA 8.65 (2019–2023)',
+      image: '/certificates/be_degree.png',
+      link: 'https://drive.google.com/file/d/1YTTYwxIe961y7qce_SdFsRhpVS2NN-vn/view?usp=sharing'
     },
     {
       title: 'Location',
@@ -119,6 +145,12 @@ export class AboutComponent implements OnInit {
       desc: 'Agentic coding, distributed systems architecture, Web3, and open-source development',
     },
   ];
+
+  openCertificate(link?: string) {
+    if (link) {
+      window.open(link, '_blank', 'noopener,noreferrer');
+    }
+  }
 
   @HostListener('window:scroll')
   onScroll() {

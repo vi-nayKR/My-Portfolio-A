@@ -14,9 +14,9 @@ import { TiltDirective } from '../../directives/tilt.directive';
         [style.transform]="'translateY(' + (-parallaxOffset()) + 'px)'"
       ></div>
 
-      <!-- Large Background Outline Typography -->
+      <!-- Outline background Typography -->
       <div
-        class="absolute left-[-10%] top-10 outline-bg-text select-none pointer-events-none font-black opacity-10 transition-transform duration-300 ease-out hidden md:block"
+        class="absolute left-[-10%] top-10 outline-bg-text select-none pointer-events-none font-black opacity-10 will-change-transform hidden md:block"
         [style.transform]="'translate3d(' + (parallaxOffset() * 1.1) + 'px, 0, 0)'"
       >
         JOURNEY
@@ -59,9 +59,26 @@ import { TiltDirective } from '../../directives/tilt.directive';
                      [class.justify-start]="i % 2 === 1"
                      [class.pr-8]="i % 2 === 0"
                      [class.pl-8]="i % 2 === 1">
-                  <div class="text-right" [class.text-left]="i % 2 === 1">
-                    <span class="text-sm font-mono text-accent">{{ exp.period }}</span>
-                    <p class="text-xs text-muted mt-1">{{ exp.location }}</p>
+                  <div class="flex flex-col" [class.items-end]="i % 2 === 0" [class.items-start]="i % 2 === 1">
+                    <div class="text-right" [class.text-left]="i % 2 === 1">
+                      <span class="text-sm font-mono text-accent">{{ exp.period }}</span>
+                      <p class="text-xs text-muted mt-1">{{ exp.location }}</p>
+                    </div>
+
+                    @if (exp.image) {
+                      <div
+                        appTilt
+                        [maxTilt]="6"
+                        [scale]="1.03"
+                        [class]="'mt-4 w-full max-w-[280px] overflow-hidden rounded-xl border border-border/30 bg-void/50 group/exp-img shadow-lg cursor-pointer ' + (exp.aspect || 'aspect-[4/3]')"
+                      >
+                        <img
+                          [src]="exp.image"
+                          [alt]="exp.company"
+                          class="w-full h-full object-cover transition-transform duration-700 group-hover/exp-img:scale-105"
+                        />
+                      </div>
+                    }
                   </div>
                 </div>
 
@@ -104,6 +121,16 @@ import { TiltDirective } from '../../directives/tilt.directive';
                         <span class="px-2 py-0.5 rounded text-xs bg-void border border-border text-muted font-mono">{{ tag }}</span>
                       }
                     </div>
+
+                    @if (exp.image) {
+                      <div [class]="'md:hidden mt-5 relative overflow-hidden rounded-xl border border-border/30 bg-void/50 group/exp-img ' + (exp.aspect || 'aspect-[4/3]')">
+                        <img
+                          [src]="exp.image"
+                          [alt]="exp.company"
+                          class="w-full h-full object-cover transition-transform duration-700 group-hover/exp-img:scale-105"
+                        />
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
@@ -133,6 +160,8 @@ export class ExperienceComponent implements OnInit {
         'Configured variable-manager for centralized configuration across feature-env branches, and built Angular modules (Transaction Risk, Travel Rule) with RxJS state management',
       ],
       tags: ['Node.js', 'TypeScript', 'Angular', 'Kafka', 'Redis', 'TypeORM', 'Web3', 'gRPC'],
+      image: 'crypto-custody.png',
+      aspect: 'aspect-[1/2]',
     },
     {
       role: 'Full Stack Developer',
@@ -147,6 +176,8 @@ export class ExperienceComponent implements OnInit {
         'Authored 750+ Cypress E2E test cases, reducing manual UI testing effort by 50%',
       ],
       tags: ['Angular', 'React', 'ASP.NET Core', 'C#', 'SQL Server', 'Cypress', 'TypeScript'],
+      image: 'slot-machine.png',
+      aspect: 'aspect-[1/2]',
     },
     {
       role: 'Software Engineer Intern',
@@ -158,6 +189,8 @@ export class ExperienceComponent implements OnInit {
         'Developed a comprehensive game recommendation system for casino gaming slot machines, incorporating user feedback and rating functionality to improve machine utilization and player engagement',
       ],
       tags: ['C#', 'ASP.NET Core', 'SQL Server', 'Algorithms'],
+      image: 'roulette.png',
+      aspect: 'aspect-[4/3]',
     },
   ];
 

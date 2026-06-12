@@ -15,7 +15,7 @@ import { PHOTO_BASE64 } from './photo-data';
     >
       <!-- Huge Parallax Background Text -->
       <div
-        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-bg-text select-none pointer-events-none transition-transform duration-300 ease-out"
+        class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 outline-bg-text select-none pointer-events-none will-change-transform"
         [style.transform]="'translate3d(calc(-50% + ' + (mouseX() * -0.04) + 'px), calc(-50% + ' + (parallaxY() * -0.22) + 'px), 0)'"
         style="opacity: 0.25;"
       >
@@ -24,12 +24,12 @@ import { PHOTO_BASE64 } from './photo-data';
 
       <!-- Parallax background blobs -->
       <div
-        class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full pointer-events-none transition-transform duration-300 ease-out"
+        class="absolute top-1/4 left-1/4 w-96 h-96 rounded-full pointer-events-none will-change-transform"
         [style.background]="'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)'"
         [style.transform]="'translate3d(' + (mouseX() * 0.05) + 'px, ' + (parallaxY() * 0.45) + 'px, 0)'"
       ></div>
       <div
-        class="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full pointer-events-none transition-transform duration-300 ease-out"
+        class="absolute bottom-1/4 right-1/4 w-72 h-72 rounded-full pointer-events-none will-change-transform"
         [style.background]="'radial-gradient(circle, rgba(129,140,248,0.08) 0%, transparent 70%)'"
         [style.transform]="'translate3d(' + (mouseX() * -0.05) + 'px, ' + (parallaxY() * 0.22) + 'px, 0)'"
       ></div>

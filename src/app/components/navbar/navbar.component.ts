@@ -45,7 +45,7 @@ import { CommonModule } from '@angular/common';
         >
           @if (isDarkMode()) {
             <!-- Sun Icon -->
-            <svg class="w-5 h-5 text-accent animate-float" style="animation-duration: 6s;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
             </svg>
           } @else {
@@ -127,11 +127,12 @@ export class NavbarComponent implements OnInit {
     { label: 'About', href: '#about', id: 'about' },
     { label: 'Skills', href: '#skills', id: 'skills' },
     { label: 'Experience', href: '#experience', id: 'experience' },
+    { label: 'Resume', href: '#resume', id: 'resume' },
     { label: 'Projects', href: '#projects', id: 'projects' },
     { label: 'Certifications', href: '#certifications', id: 'certifications' },
-    { label: 'Contact', href: '#contact', id: 'contact' },
     { label: 'Gaming', href: '#gaming', id: 'gaming' },
     { label: 'Setup', href: '#setup', id: 'setup' },
+    { label: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   ngOnInit() {
@@ -180,7 +181,7 @@ export class NavbarComponent implements OnInit {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
     
     // Add home as a default section at top of page
-    const sections = ['home', 'about', 'skills', 'experience', 'projects', 'certifications', 'contact', 'gaming', 'setup'];
+    const sections = ['home', 'about', 'skills', 'experience', 'resume', 'projects', 'certifications', 'contact', 'gaming', 'setup'];
     let currentActive = 'home';
     
     // Check scroll height to set threshold

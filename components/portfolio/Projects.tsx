@@ -3,8 +3,8 @@ import { useInView, useScrollY } from '@/hooks/useParallax'
 import { ShieldCheck, Monitor, DollarSign, Users, ArrowLeftRight, ClipboardCheck, Github, ArrowRight } from 'lucide-react'
 
 const featuredTags = [
-  'Go', 'Chi Router', 'PostgreSQL', 'PostGIS', 'Redis',
-  'MinIO', 'Docker', 'GitHub Actions', 'JWT', 'Google OAuth',
+  'Go', 'Clean Architecture', 'PostgreSQL', 'PostGIS', 'Redis',
+  'WebSockets', 'MinIO', 'Kotlin', 'Jetpack Compose', 'Cloudflare Tunnel',
 ]
 
 const projects = [
@@ -93,37 +93,59 @@ export default function Projects() {
             style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.09) 0%, transparent 65%)' }}
             aria-hidden="true"
           />
-          <div className="relative z-10">
-            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
-              <div>
-                <span className="text-xs font-mono text-accent bg-accent/10 px-2 py-1 rounded mb-3 inline-block">
-                  Featured Project
-                </span>
-                <h3 className="text-2xl font-display font-bold text-frost">Medha API</h3>
-                <p className="text-muted text-sm mt-1">Backend for Mobile App</p>
+          <div className="relative z-10 flex flex-col lg:flex-row items-center gap-8 md:gap-12">
+            {/* Left side: details */}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <span className="text-xs font-mono text-accent bg-accent/10 px-2 py-1 rounded mb-2 inline-block">
+                    Featured Project
+                  </span>
+                  <h3 className="text-2xl font-display font-bold text-frost">Medha</h3>
+                  <p className="text-accent text-xs font-mono tracking-widest uppercase mt-0.5">A SACRED BRIDGE</p>
+                </div>
+                <a
+                  href="https://github.com/vi-nayKR"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-accent/50 text-muted hover:text-frost text-sm transition-all duration-200 self-start sm:self-center"
+                >
+                  <Github className="w-4 h-4" />
+                  View Code
+                </a>
               </div>
-              <a
-                href="https://github.com/vi-nayKR"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border hover:border-accent/50 text-muted hover:text-frost text-sm transition-all duration-200 self-start"
-              >
-                <Github className="w-4 h-4" />
-                View Code
-              </a>
+
+              {/* Short, concise, clear cut description */}
+              <div className="space-y-4 mb-6 text-muted text-sm leading-relaxed max-w-2xl">
+                <p>
+                  <strong className="text-frost">Setu:</strong> A sacred bridge connecting Yajmans and Pandits, designed purely for dharmic connection.
+                </p>
+                <p>
+                  <strong className="text-frost">Architecture:</strong> Clean Architecture with isolated bounded contexts across four layers: Domain, Postgres Repository (pgx/PostGIS), Service, and Handler.
+                </p>
+                <p>
+                  <strong className="text-frost">Core Systems:</strong> Real-time WebSocket chat (Redis Pub/Sub), spatial matchmaking (ST_DWithin), MinIO media proxying, and CI/CD deployment via Cloudflare Tunnel.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {featuredTags.map(tag => (
+                  <span key={tag} className="px-3 py-1 rounded-full text-xs font-mono bg-void border border-accent/30 text-accent">
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
-            <p className="text-muted leading-relaxed mb-6 max-w-2xl">
-              Production-grade REST API built from scratch in Go (Chi router) for the Medha mobile
-              app. Implements OTP auth via Message Central, Google OAuth, Apple Sign-In, and
-              JWT-based session management. Deployed on hardened Ubuntu VPS with Cloudflare Tunnel
-              routing and GitHub Actions CI/CD.
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {featuredTags.map(tag => (
-                <span key={tag} className="px-3 py-1 rounded-full text-xs font-mono bg-void border border-accent/30 text-accent">
-                  {tag}
-                </span>
-              ))}
+
+            {/* Right side: Mobile Screenshot */}
+            <div className="w-full lg:w-64 shrink-0 flex justify-center">
+              <div className="w-48 lg:w-full max-w-[220px] aspect-[9/20] overflow-hidden rounded-2xl border border-border/30 bg-void/50 shadow-2xl relative group/medha-img">
+                <img
+                  src="medha-app.png"
+                  alt="Medha App Onboarding"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/medha-img:scale-105"
+                />
+              </div>
             </div>
           </div>
         </div>
