@@ -203,7 +203,7 @@ export class ContactComponent implements OnInit {
     if (!this.form.name || !this.form.email || !this.form.message) return;
     this.submitted.set(true);
 
-    const accessKey = 'YOUR_WEB3FORMS_ACCESS_KEY'; // Replace this with your free access key from https://web3forms.com/
+    const accessKey = '2ac57ee9-4b3e-49fe-b359-dc35b95a705f'; // Web3Forms access key
 
     if (accessKey === 'YOUR_WEB3FORMS_ACCESS_KEY') {
       console.warn('Please set your Web3Forms access key to receive form emails.');
