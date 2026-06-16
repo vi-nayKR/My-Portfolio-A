@@ -82,6 +82,18 @@ body {
   will-change: transform;
 }
 
+/* ── Hero section: guaranteed navbar clearance ─────────────────────────────
+   Using raw CSS (not Tailwind) so the padding is ALWAYS applied on mobile.
+   The fixed navbar is ~64px tall on mobile; we add extra breathing room.     */
+#home {
+  padding-top: 160px; /* mobile default: navbar (~64px) + comfortable gap */
+}
+@media (min-width: 768px) {
+  #home {
+    padding-top: 160px; /* desktop keeps same top padding */
+  }
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 4px;

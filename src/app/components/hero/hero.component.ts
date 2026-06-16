@@ -10,7 +10,7 @@ import { PHOTO_BASE64 } from './photo-data';
   template: `
     <section
       id="home"
-      class="relative min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden px-4 md:px-6 pt-36 pb-12 md:pt-40 md:pb-24"
+      class="hero-section relative min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden px-4 md:px-6 pb-12 md:pb-24"
     >
       <!-- Huge Parallax Background Text -->
       <div
