@@ -93,7 +93,7 @@ export class AppComponent implements OnInit {
         if (anchor) {
           const href = anchor.getAttribute('href');
           if (href && href.startsWith('#') && href !== '#') {
-            const element = document.querySelector(href);
+            const element = document.querySelector(href) as HTMLElement;
             if (element) {
               e.preventDefault();
               lenis.scrollTo(element, { offset: -80 });

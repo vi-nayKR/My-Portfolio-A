@@ -10,7 +10,7 @@ import { PHOTO_BASE64 } from './photo-data';
   template: `
     <section
       id="home"
-      class="relative min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden px-4 md:px-6 pt-24 pb-12 md:pt-40 md:pb-24"
+      class="relative min-h-screen flex flex-col items-center justify-start md:justify-center overflow-hidden px-4 md:px-6 pt-32 pb-12 md:pt-40 md:pb-24"
     >
       <!-- Huge Parallax Background Text -->
       <div
@@ -48,7 +48,7 @@ import { PHOTO_BASE64 } from './photo-data';
         </div>
       }
 
-      <div class="relative z-10 max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 flex-1">
+      <div class="relative z-10 max-w-6xl w-full mx-auto flex flex-col md:flex-row items-center justify-start md:justify-between gap-8 md:gap-12 flex-1">
         <!-- Left Column: Name & Title Greeting (55%) -->
         <div class="w-full md:w-[55%] flex flex-col items-center md:items-start text-center md:text-left">
           
@@ -97,7 +97,7 @@ import { PHOTO_BASE64 } from './photo-data';
           </div>
         </div>
 
-        {/* Right Column: Profile Photo (45%) */}
+        <!-- Right Column: Profile Photo (45%) -->
         <div class="w-full md:w-[45%] flex items-center justify-center relative min-h-[280px] md:min-h-[500px]">
           <!-- Ambient glow behind photo -->
           <div
