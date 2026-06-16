@@ -6,6 +6,8 @@ import { SkillsComponent } from './components/skills/skills.component';
 import { ExperienceComponent } from './components/experience/experience.component';
 import { ResumeComponent } from './components/resume/resume.component';
 import { ProjectsComponent } from './components/projects/projects.component';
+import { MajorProjectComponent } from './components/major-project/major-project.component';
+import { ConferenceComponent } from './components/conference/conference.component';
 import { GamingComponent } from './components/gaming/gaming.component';
 import { SetupComponent } from './components/setup/setup.component';
 import { CertificationsComponent } from './components/certifications/certifications.component';
@@ -26,6 +28,8 @@ import Lenis from 'lenis';
     ExperienceComponent,
     ResumeComponent,
     ProjectsComponent,
+    MajorProjectComponent,
+    ConferenceComponent,
     GamingComponent,
     SetupComponent,
     CertificationsComponent,
@@ -46,6 +50,8 @@ import Lenis from 'lenis';
         <app-experience />
         <app-resume />
         <app-projects />
+        <app-conference />
+        <app-major-project />
         <app-certifications />
         <app-gaming />
         <app-setup />

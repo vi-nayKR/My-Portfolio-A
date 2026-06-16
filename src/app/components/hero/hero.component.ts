@@ -1,13 +1,12 @@
 import { Component, HostListener, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TiltDirective } from '../../directives/tilt.directive';
-import { Model3dComponent } from '../model3d/model3d.component';
 import { PHOTO_BASE64 } from './photo-data';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, TiltDirective, Model3dComponent],
+  imports: [CommonModule, TiltDirective],
   template: `
     <section
       id="home"
@@ -98,28 +97,44 @@ import { PHOTO_BASE64 } from './photo-data';
           </div>
         </div>
 
-        <!-- Right Column: Interactive 3D Model with Overlaying Profile Photo (45%) -->
+        <!-- Right Column: Profile Photo (45%) -->
         <div class="w-full md:w-[45%] flex items-center justify-center relative min-h-[400px] md:min-h-[500px]">
-          <!-- Interactive 3D WebGL Layer -->
-          <div class="absolute inset-0 z-0">
-            <app-model3d></app-model3d>
-          </div>
+          <!-- Ambient glow behind photo -->
+          <div
+            class="absolute w-64 h-64 rounded-full pointer-events-none"
+            style="background: radial-gradient(circle, rgba(255,107,0,0.18) 0%, transparent 65%); filter: blur(28px);"
+            [style.transform]="'translate3d(' + (mouseX() * 0.03) + 'px, ' + (mouseY() * 0.03) + 'px, 0)'"
+          ></div>
 
-          <!-- Profile Photo floating in center of 3D gyroscope system -->
-          <div class="relative z-10 pointer-events-none animate-float" style="animation-delay: 0s;">
+          <!-- Rotating dashed outer rings -->
+          <div
+            class="absolute w-72 h-72 md:w-80 md:h-80 rounded-full border border-accent/20 pointer-events-none"
+            style="border-style: dashed; transition: transform 0.6s ease-out;"
+            [style.transform]="'rotate(' + (mouseX() * 0.04) + 'deg)'"
+          ></div>
+          <div
+            class="absolute w-60 h-60 md:w-72 md:h-72 rounded-full border border-accent/10 pointer-events-none"
+            style="border-style: dashed; transition: transform 0.8s ease-out;"
+            [style.transform]="'rotate(' + (-mouseX() * 0.06) + 'deg)'"
+          ></div>
+
+          <!-- Profile photo -->
+          <div class="relative z-10 animate-float" style="animation-delay: 0s;">
             <div
-              class="relative w-40 h-40 md:w-48 md:h-48 rounded-full animate-pulse-glow border border-accent/20 overflow-hidden"
-              style="background: radial-gradient(circle, var(--color-surface) 0%, var(--color-abyss) 100%);"
+              class="relative w-52 h-52 md:w-60 md:h-60 rounded-full"
+              style="transition: transform 0.3s ease-out;"
+              [style.transform]="'translate3d(' + (mouseX() * 0.015) + 'px, ' + (mouseY() * 0.015) + 'px, 0)'"
             >
-              <!-- Ring decorations -->
-              <div class="absolute inset-0 rounded-full border-2 border-accent/40 scale-110 transition-transform duration-500"></div>
-              <div class="absolute inset-0 rounded-full border border-accent/20 scale-125 transition-transform duration-700"></div>
-
+              <!-- Glow ring -->
+              <div class="absolute inset-0 rounded-full animate-pulse-glow" style="background: radial-gradient(circle, rgba(255,107,0,0.12) 0%, transparent 60%);"></div>
+              <!-- Accent border rings -->
+              <div class="absolute -inset-2 rounded-full border-2 border-accent/30"></div>
+              <div class="absolute -inset-4 rounded-full border border-accent/15"></div>
               <!-- Photo -->
               <img
                 [src]="photoUrl()"
                 alt="Vinay KR"
-                class="w-full h-full rounded-full object-cover p-1.5 border-2 border-accent/60"
+                class="w-full h-full rounded-full object-cover border-2 border-accent/50 shadow-2xl shadow-accent/20"
                 style="object-position: center top;"
               />
             </div>

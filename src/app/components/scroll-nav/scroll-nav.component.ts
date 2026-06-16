@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <!-- On this page text navigation (Desktop only) -->
     <div 
-      class="fixed right-8 top-[30%] z-50 hidden xl:flex flex-col gap-2 max-w-[220px] text-left transition-all duration-300"
+      class="fixed right-4 top-1/2 -translate-y-1/2 z-40 hidden xl:flex flex-col gap-1.5 w-[180px] text-left transition-all duration-300"
       [class.opacity-0]="hideNav()"
       [class.pointer-events-none]="hideNav()"
     >
@@ -92,6 +92,8 @@ export class ScrollNavComponent implements OnInit, OnDestroy {
     { id: 'experience', label: 'Work Experience' },
     { id: 'resume', label: 'Interactive Resume' },
     { id: 'projects', label: 'Featured Projects' },
+    { id: 'conference', label: 'Conference & Paper' },
+    { id: 'major-project', label: 'B.E. Major Project' },
     { id: 'certifications', label: 'Certifications' },
     { id: 'gaming', label: 'Playground / Gaming' },
     { id: 'setup', label: 'OS Workspace' },

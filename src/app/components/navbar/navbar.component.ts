@@ -7,10 +7,10 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <nav
-      class="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-5xl rounded-2xl apple-glass transition-all duration-500 py-2.5 px-6 flex items-center justify-between"
-      [class.top-2]="scrolled()"
-      [class.border-accent/30]="scrolled()"
-      [class.shadow-accent/5]="scrolled()"
+      class="fixed left-0 right-0 z-50 apple-glass transition-all duration-500 py-3 px-6 flex items-center justify-between top-0"
+      [class.border-b]="scrolled()"
+      [class.border-accent/20]="scrolled()"
+      [class.shadow-lg]="scrolled()"
     >
       <!-- Logo: Vinay -->
       <a href="#home" class="group flex items-center gap-2">
@@ -129,6 +129,8 @@ export class NavbarComponent implements OnInit {
     { label: 'Experience', href: '#experience', id: 'experience' },
     { label: 'Resume', href: '#resume', id: 'resume' },
     { label: 'Projects', href: '#projects', id: 'projects' },
+    { label: 'Conference', href: '#conference', id: 'conference' },
+    { label: 'B.E.', href: '#major-project', id: 'major-project' },
     { label: 'Certifications', href: '#certifications', id: 'certifications' },
     { label: 'Gaming', href: '#gaming', id: 'gaming' },
     { label: 'Setup', href: '#setup', id: 'setup' },
@@ -181,7 +183,7 @@ export class NavbarComponent implements OnInit {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
     
     // Add home as a default section at top of page
-    const sections = ['home', 'about', 'skills', 'experience', 'resume', 'projects', 'certifications', 'contact', 'gaming', 'setup'];
+    const sections = ['home', 'about', 'skills', 'experience', 'resume', 'projects', 'major-project', 'certifications', 'contact', 'gaming', 'setup'];
     let currentActive = 'home';
     
     // Check scroll height to set threshold
