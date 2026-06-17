@@ -132,8 +132,8 @@ export class NavbarComponent implements OnInit {
     { label: 'Conference', href: '#conference', id: 'conference' },
     { label: 'B.E.', href: '#major-project', id: 'major-project' },
     { label: 'Certifications', href: '#certifications', id: 'certifications' },
-    { label: 'Gaming', href: '#gaming', id: 'gaming' },
-    { label: 'Setup', href: '#setup', id: 'setup' },
+    // { label: 'Gaming', href: '#gaming', id: 'gaming' },
+    // { label: 'Setup', href: '#setup', id: 'setup' },
     { label: 'Contact', href: '#contact', id: 'contact' },
   ];
 
@@ -183,7 +183,7 @@ export class NavbarComponent implements OnInit {
     if (typeof window === 'undefined' || typeof document === 'undefined') return;
     
     // Add home as a default section at top of page
-    const sections = ['home', 'about', 'skills', 'experience', 'resume', 'projects', 'major-project', 'certifications', 'contact', 'gaming', 'setup'];
+    const sections = ['home', 'about', 'skills', 'experience', 'resume', 'projects', 'major-project', 'certifications', 'contact'];
     let currentActive = 'home';
     
     // Check scroll height to set threshold
@@ -195,9 +195,9 @@ export class NavbarComponent implements OnInit {
       return;
     }
 
-    // Special case for very bottom (Setup section is at the end)
+    // Special case for very bottom (Contact section is at the end)
     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
-      this.activeSection.set('setup');
+      this.activeSection.set('contact');
       return;
     }
 
