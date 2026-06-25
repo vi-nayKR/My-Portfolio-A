@@ -66,6 +66,12 @@ import { CommonModule } from '@angular/common';
 
       <!-- Mobile Toggle Box (Theme + Menu) -->
       <div class="flex items-center gap-3 md:hidden">
+        <a
+          href="#contact"
+          class="px-3.5 py-1.5 rounded-xl bg-accent hover:bg-accent-glow text-frost text-xs font-bold transition-all duration-200 shadow-md shadow-accent/10 hover:shadow-lg hover:shadow-accent/20"
+        >
+          Hire Me
+        </a>
         <button
           (click)="toggleTheme()"
           class="p-2 rounded-lg border border-border text-muted hover:text-frost cursor-pointer flex items-center justify-center shrink-0"
@@ -112,6 +118,13 @@ import { CommonModule } from '@angular/common';
               (click)="menuOpen.set(false)"
             >{{ item.label }}</a>
           }
+          <a
+            href="#contact"
+            (click)="menuOpen.set(false)"
+            class="w-full text-center py-3 bg-accent hover:bg-accent-glow text-frost font-bold text-sm rounded-xl mt-2 transition-all duration-200 hover:shadow-lg hover:shadow-accent/25"
+          >
+            Hire Me
+          </a>
         </div>
       }
     </nav>
