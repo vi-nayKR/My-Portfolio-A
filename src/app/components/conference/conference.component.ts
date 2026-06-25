@@ -154,7 +154,6 @@ import { TiltDirective } from '../../directives/tilt.directive';
           <div class="px-8 py-4 border-t border-border/20 bg-void/20 flex flex-wrap gap-6 text-[10px] font-mono text-muted">
             <span>🏛 Siddaganga Institute of Technology, Tumkur</span>
             <span>👨‍🏫 Guide: Dr. Pramod T C</span>
-            <span>🎓 Batch B-10 &middot; B.E. Computer Science Engineering</span>
           </div>
         </div>
       </div>

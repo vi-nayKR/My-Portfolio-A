@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, HostListener, PLATFORM_ID, Inject, DestroyRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, PLATFORM_ID, Inject, DestroyRef, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
@@ -45,9 +45,8 @@ export class CursorComponent implements OnInit, OnDestroy {
     private destroyRef: DestroyRef
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
-    
+
     if (this.isBrowser) {
-      // Cleanup custom pointer class on destroy
       this.destroyRef.onDestroy(() => {
         document.documentElement.classList.remove('custom-cursor-active');
       });
@@ -60,7 +59,21 @@ export class CursorComponent implements OnInit, OnDestroy {
     this.checkDeviceType();
     if (this.isTouch()) return;
 
-    // Start native frame anim rendering loop
+    document.documentElement.classList.add('custom-cursor-active');
+
+    // Attach event listeners (native, not @HostListener, for zero Angular overhead in 60fps loop)
+    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('mouseout', this.handleMouseLeave);
+    document.addEventListener('mouseenter', this.handleMouseEnter);
+
+    this.destroyRef.onDestroy(() => {
+      window.removeEventListener('mousemove', this.handleMouseMove);
+      window.removeEventListener('mouseout', this.handleMouseLeave);
+      document.removeEventListener('mouseenter', this.handleMouseEnter);
+      document.documentElement.classList.remove('custom-cursor-active');
+    });
+
+    // Start native frame animation rendering loop
     this.animate();
   }
 
@@ -71,23 +84,21 @@ export class CursorComponent implements OnInit, OnDestroy {
   }
 
   private checkDeviceType() {
-    const hasTouch = 
-      'ontouchstart' in window || 
-      navigator.maxTouchPoints > 0 || 
+    const hasTouch =
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
       (window.matchMedia && window.matchMedia('(hover: none)').matches);
     this.isTouch.set(hasTouch);
   }
 
-  @HostListener('window:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
+  // ── Native event handlers (no Angular change detection overhead) ────
+  private handleMouseMove = (event: MouseEvent) => {
     if (this.isTouch()) return;
 
     if (!this.isVisible) {
       this.isVisible = true;
-      // Anchor trail to prevent top-left jumping
       this.trailX = event.clientX;
       this.trailY = event.clientY;
-      document.documentElement.classList.add('custom-cursor-active');
     }
 
     this.mouseX = event.clientX;
@@ -96,29 +107,31 @@ export class CursorComponent implements OnInit, OnDestroy {
     // Interactive element detection
     const target = event.target as HTMLElement | null;
     if (target) {
-      const isInteractive = 
-        target.tagName === 'A' || 
-        target.tagName === 'BUTTON' || 
-        target.closest('a') !== null || 
-        target.closest('button') !== null || 
-        target.classList.contains('cursor-pointer') || 
-        target.closest('.card-hover') !== null ||
-        target.closest('[appTilt]') !== null;
-
-      this.isHovered = !!isInteractive;
+      this.isHovered = !!(
+        target.tagName === 'A' ||
+        target.tagName === 'BUTTON' ||
+        target.closest('a') ||
+        target.closest('button') ||
+        target.classList.contains('cursor-pointer') ||
+        target.closest('.card-hover') ||
+        target.closest('[appTilt]')
+      );
     }
-  }
+  };
 
-  @HostListener('window:mouseout', ['$event'])
-  onMouseLeaveWindow(event: MouseEvent) {
-    if (!event.relatedTarget && !event.toElement) {
+  private handleMouseLeave = (event: MouseEvent) => {
+    if (!event.relatedTarget && !(event as any).toElement) {
       this.isVisible = false;
-      document.documentElement.classList.remove('custom-cursor-active');
     }
-  }
+  };
+
+  private handleMouseEnter = () => {
+    this.isVisible = true;
+  };
+
+  // ── 60fps animation loop ────────────────────────────────────────
 
   private animate = () => {
-    // Smoother trail deceleration factor
     const lerpSpeed = 0.08;
     this.trailX += (this.mouseX - this.trailX) * lerpSpeed;
     this.trailY += (this.mouseY - this.trailY) * lerpSpeed;
@@ -127,36 +140,121 @@ export class CursorComponent implements OnInit, OnDestroy {
       const innerEl = this.innerDot.nativeElement;
       const outerEl = this.outerRing.nativeElement;
 
-      // Handle visibility transitions
-      if (this.isVisible) {
-        innerEl.style.opacity = '1';
-        outerEl.style.opacity = '1';
-      } else {
-        innerEl.style.opacity = '0';
-        outerEl.style.opacity = '0';
-      }
+      // Visibility
+      innerEl.style.opacity = this.isVisible ? '1' : '0';
+      outerEl.style.opacity = this.isVisible ? '1' : '0';
 
       const ringOffset = this.isHovered ? 24 : 12;
 
-      // GPU-accelerated translation styles (translate3d)
       innerEl.style.transform = `translate3d(${this.mouseX - 4}px, ${this.mouseY - 4}px, 0)`;
       outerEl.style.transform = `translate3d(${this.trailX - ringOffset}px, ${this.trailY - ringOffset}px, 0)`;
 
-      // Dynamic sizing and styling matching active hover configurations
-      const accentRGB = getComputedStyle(document.documentElement).getPropertyValue('--color-accent-rgb').trim() || '255, 107, 0';
+      // ── Section-aware dynamic colors ──────────────────────────
+      let accentRGB = this.getAccentRGB();
+
       if (this.isHovered) {
         outerEl.style.width = '48px';
         outerEl.style.height = '48px';
-        outerEl.style.boxShadow = `0 0 20px rgba(${accentRGB}, 0.4)`;
-        outerEl.style.borderColor = `rgba(${accentRGB}, 0.8)`;
+        outerEl.style.boxShadow = `0 0 25px rgba(${accentRGB}, 0.55)`;
+        outerEl.style.borderColor = `rgba(${accentRGB}, 0.9)`;
+        innerEl.style.backgroundColor = `rgba(${accentRGB}, 1)`;
+        outerEl.style.backgroundColor = `rgba(${accentRGB}, 0.08)`;
       } else {
         outerEl.style.width = '24px';
         outerEl.style.height = '24px';
         outerEl.style.boxShadow = 'none';
         outerEl.style.borderColor = `rgba(${accentRGB}, 0.5)`;
+        const isLightMode = document.documentElement.classList.contains('light-mode');
+        innerEl.style.backgroundColor = isLightMode ? 'rgba(17, 24, 39, 0.9)' : 'rgba(244, 245, 248, 0.9)';
+        outerEl.style.backgroundColor = 'transparent';
       }
     }
 
     this.animFrameId = requestAnimationFrame(this.animate);
   };
+
+  /** Determine the accent RGB based on which section the cursor is over. */
+  private getAccentRGB(): string {
+    const sections = ['home', 'about', 'skills', 'experience', 'resume', 'projects', 'conference', 'major-project', 'certifications', 'contact'];
+    let currentSectionId = 'home';
+
+    for (const secId of sections) {
+      const el = document.getElementById(secId);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (this.mouseY >= rect.top && this.mouseY <= rect.bottom) {
+          currentSectionId = secId;
+          break;
+        }
+      }
+    }
+
+    // Check if hovering a navbar anchor
+    const hoveredElement = document.elementFromPoint(this.mouseX, this.mouseY);
+    if (hoveredElement) {
+      const anchor = hoveredElement.closest('a');
+      if (anchor) {
+        const href = anchor.getAttribute('href');
+        if (href && href.startsWith('#') && href !== '#') {
+          currentSectionId = href.substring(1);
+        }
+      }
+    }
+
+    const activeSec = currentSectionId;
+    const isLightMode = document.documentElement.classList.contains('light-mode');
+
+    // Light-mode palette (deeper, more saturated for contrast on white)
+    if (isLightMode) {
+      switch (activeSec) {
+        case 'home':
+        case 'contact':
+          return '234, 88, 12'; // Orange-600
+        case 'about':
+          return '79, 70, 229'; // Indigo-600
+        case 'skills':
+          return '147, 51, 234'; // Purple-600
+        case 'experience':
+          return '8, 145, 178'; // Cyan-600
+        case 'resume':
+          return '217, 119, 6'; // Amber-600
+        case 'projects':
+          return '220, 38, 38'; // Red-600
+        case 'conference':
+          return '16, 185, 129'; // Emerald-600
+        case 'major-project':
+          return '202, 138, 4'; // Yellow-600
+        case 'certifications':
+          return '5, 150, 105'; // Emerald-600
+        default:
+          return '234, 88, 12';
+      }
+    }
+
+    // Dark-mode palette (vivid neon-ish for contrast on black)
+    switch (activeSec) {
+      case 'home':
+      case 'contact':
+        return '255, 107, 0'; // Accent Orange
+      case 'about':
+        return '99, 102, 241'; // Indigo
+      case 'skills':
+        return '168, 85, 247'; // Purple
+      case 'experience':
+        return '6, 182, 212'; // Cyan
+      case 'resume':
+        return '245, 158, 11'; // Amber
+      case 'projects':
+        return '239, 68, 68'; // Red
+      case 'conference':
+        return '16, 185, 129'; // Emerald
+      case 'major-project':
+        return '241, 196, 15'; // Yellow
+      case 'certifications':
+        return '16, 185, 129'; // Emerald
+      default:
+        return '255, 107, 0';
+    }
+  }
+
 }

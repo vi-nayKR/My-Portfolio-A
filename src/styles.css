@@ -349,3 +349,112 @@ main > app-contact > section {
   }
 }
 
+/* ══════════════════════════════════════════════════════════════════
+   ADVANCED POLISH LAYER
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Top Reading-Progress Bar ──────────────────────────────────────
+   A thin accent bar at the very top of the viewport that fills as the
+   user scrolls the document. Driven by a CSS var --scroll-progress
+   (0–100) that the Navbar updates each rAF frame. */
+.reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(var(--scroll-progress, 0));
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-glow));
+  box-shadow: 0 0 10px rgba(var(--color-accent-rgb), 0.6);
+  z-index: 60;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* ── Reveal-on-scroll (used by IntersectionObserver) ───────────────
+   Elements with .reveal start hidden + nudged down; the observer adds
+   .reveal-in to animate them into place with a spring-like ease. */
+.reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.reveal-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Magnetic hover targets ────────────────────────────────────────
+   Buttons/links with .magnetic get JS-driven positional attraction on
+   pointer move. The base transition is kept fast + springy. */
+.magnetic {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* ── View Transitions (SPA-style crossfade on theme toggle) ─────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.4s;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Focus-visible (keyboard accessibility + glow) ──────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ── Selection color ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(var(--color-accent-rgb), 0.3);
+  color: var(--color-frost);
+}
+
+/* ── Text balance & wrap polish for headings ─────────────────────── */
+h1, h2, h3 {
+  text-wrap: balance;
+}
+p {
+  text-wrap: pretty;
+}
+
+/* ── Smooth image rendering & lazy fade-in ───────────────────────── */
+img {
+  color: var(--color-muted);
+}
+img.lazy-fade {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+img.lazy-fade.loaded {
+  opacity: 1;
+}
+
+/* ── Marquee shimmer for the gradient text ───────────────────────── */
+@keyframes shimmer-text {
+  0% { background-position: 0% center; }
+  100% { background-position: -200% center; }
+}
+
+/* ── Reduced-motion: respect users who disable animation ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reading-progress { display: none; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+}
+
+
+
+

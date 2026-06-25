@@ -1,4 +1,4 @@
-import { Component, HostListener, signal } from '@angular/core';
+import { Component, HostListener, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TiltDirective } from '../../directives/tilt.directive';
 import { PHOTO_BASE64 } from './photo-data';
@@ -56,13 +56,21 @@ import { PHOTO_BASE64 } from './photo-data';
             <h1 class="text-4xl md:text-6xl font-display font-bold leading-none mb-6 text-frost">
               👋 Hi, I'm <span class="gradient-text">Vinay</span>!
             </h1>
-            <p class="text-accent font-mono text-xs md:text-sm tracking-widest mb-4 uppercase">Full Stack Developer</p>
+            <p class="text-accent font-mono text-xs md:text-sm tracking-widest mb-4 uppercase h-5 overflow-hidden">
+              <span
+                class="inline-block"
+                [style.opacity]="roleVisible() ? '1' : '0'"
+                [style.transform]="roleVisible() ? 'translateY(0)' : 'translateY(-100%)'"
+                style="transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);"
+              >
+                {{ roles[roleIndex()] }}
+              </span>
+            </p>
             <p class="text-muted text-lg md:text-xl max-w-2xl mx-auto md:mx-0 leading-relaxed mt-4">
-              Building production-grade applications across
+              Building production-grade web applications, robust APIs, and intelligent automation across
               <span class="text-frost font-medium">FinTech</span>,
-              <span class="text-frost font-medium">Web3 Custody</span>, and
-              <span class="text-frost font-medium">Casino Gaming</span> domains
-              with 3+ years of experience.
+              <span class="text-frost font-medium">Web3</span>, and
+              <span class="text-frost font-medium">high-throughput ecosystems</span>.
             </p>
           </div>
 
@@ -79,7 +87,9 @@ import { PHOTO_BASE64 } from './photo-data';
           <div class="flex flex-col sm:flex-row gap-4 mt-10 animate-fade-in-up" style="animation-delay:0.5s; opacity:0;">
             <a
               href="#projects"
-              class="px-8 py-3.5 rounded-xl bg-accent hover:bg-accent-glow text-frost font-semibold text-sm transition-all duration-200 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-0.5 text-center"
+              (mousemove)="onMagneticMove($event)"
+              (mouseleave)="onMagneticLeave($event)"
+              class="magnetic px-8 py-3.5 rounded-xl bg-accent hover:bg-accent-glow text-frost font-semibold text-sm transition-colors duration-200 hover:shadow-xl hover:shadow-accent/25 text-center will-change-transform"
             >
               View Projects
             </a>
@@ -150,17 +160,22 @@ import { PHOTO_BASE64 } from './photo-data';
     </section>
   `,
 })
-export class HeroComponent {
+export class HeroComponent implements OnDestroy {
   photoUrl = signal<string>(PHOTO_BASE64);
   parallaxY = signal(0);
   mouseX = signal(0);
   mouseY = signal(0);
   hoveredTag = signal<string | null>(null);
 
+  // Rotating role title — cycles every 2.6s for a living, animated headline.
+  roles = ['Full Stack Developer', 'Backend Engineer', 'Web3 Builder', 'Clean Architecture Advocate'];
+  roleIndex = signal(0);
+  roleVisible = signal(true);
+  private roleTimer?: ReturnType<typeof setInterval>;
+
   techs = ['Angular', 'React', 'TypeScript', 'Node.js', 'Go', 'PostgreSQL', 'Redis', 'Docker', 'Auth0', 'Cypress'];
 
   floatingTags = [
-    { text: '<Code />', top: '22%', left: '10%', speedX: 0.05, speedY: 0.04, target: 'projects' },
     { text: 'Go', top: '16%', left: '78%', speedX: -0.06, speedY: 0.03, target: 'skills' },
     { text: 'RxJS', top: '68%', left: '8%', speedX: 0.04, speedY: -0.05, target: 'skills' },
     { text: '2FA', top: '78%', left: '80%', speedX: -0.05, speedY: 0.03, target: 'skills' },
@@ -168,15 +183,57 @@ export class HeroComponent {
     { text: 'Angular', top: '82%', left: '22%', speedX: -0.03, speedY: 0.05, target: 'skills' },
   ];
 
+  private ticking = false;
+
+  constructor() {
+    // Start the rotating role ticker (skipped for reduced-motion users).
+    const reduceMotion = typeof window !== 'undefined'
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceMotion) {
+      this.roleTimer = setInterval(() => {
+        this.roleVisible.set(false); // fade out
+        setTimeout(() => {
+          this.roleIndex.update((i) => (i + 1) % this.roles.length);
+          this.roleVisible.set(true); // fade in with new role
+        }, 350);
+      }, 2600);
+    }
+  }
+
   @HostListener('window:scroll')
   onScroll() {
-    this.parallaxY.set(window.scrollY);
+    // rAF throttle: coalesce scroll bursts into a single frame for jank-free parallax.
+    if (this.ticking) return;
+    this.ticking = true;
+    requestAnimationFrame(() => {
+      this.parallaxY.set(window.scrollY);
+      this.ticking = false;
+    });
   }
 
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
     this.mouseX.set(event.clientX - window.innerWidth / 2);
     this.mouseY.set(event.clientY - window.innerHeight / 2);
+  }
+
+  // Magnetic pointer attraction for the primary CTA.
+  onMagneticMove(event: MouseEvent) {
+    const el = event.currentTarget as HTMLElement;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = event.clientX - (rect.left + rect.width / 2);
+    const y = event.clientY - (rect.top + rect.height / 2);
+    // Translate at 30% of the pointer offset — a subtle, premium pull.
+    el.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+  }
+  onMagneticLeave(event: MouseEvent) {
+    const el = event.currentTarget as HTMLElement;
+    if (el) el.style.transform = 'translate(0px, 0px)';
+  }
+
+  ngOnDestroy() {
+    if (this.roleTimer) clearInterval(this.roleTimer);
   }
 
   scrollToSection(targetId: string) {
