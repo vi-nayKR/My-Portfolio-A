@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TiltDirective } from '../../directives/tilt.directive';
 import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
@@ -114,19 +114,42 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
               </div>
             </div>
 
-            <!-- Right side: Mobile Screenshot -->
-            <div class="w-full lg:w-64 shrink-0 flex justify-center">
+            <!-- Right side: Mobile Screenshot Slideshow -->
+            <div class="w-full lg:w-80 shrink-0 flex justify-center">
               <div
                 appTilt
                 [maxTilt]="6"
                 [scale]="1.03"
-                class="w-48 lg:w-full max-w-[220px] aspect-[9/20] overflow-hidden rounded-2xl border border-border/30 bg-void/50 shadow-2xl relative group/medha-img"
+                class="w-64 lg:w-full max-w-[286px] aspect-[9/20] overflow-hidden rounded-2xl border border-border/30 bg-void/50 shadow-2xl relative group/medha-img"
               >
-                <img
-                  src="medha-app.png"
-                  alt="Medha App Onboarding"
-                  class="w-full h-full object-cover transition-transform duration-700 group-hover/medha-img:scale-105"
-                />
+                <!-- Slides -->
+                <div class="w-full h-full relative">
+                  @for (src of medhaImages; track src; let i = $index) {
+                    <img
+                      [src]="src"
+                      [alt]="'Medha App Screen ' + (i + 1)"
+                      class="absolute inset-x-0 w-full h-[102%] object-cover transition-opacity duration-1000 ease-in-out"
+                      [style.top]="'-2%'"
+                      [style.opacity]="currentMedhaSlide() === i ? '1' : '0'"
+                      [style.zIndex]="currentMedhaSlide() === i ? '10' : '0'"
+                    />
+                  }
+                </div>
+
+                <!-- Dot Indicators -->
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+                  @for (src of medhaImages; track src; let i = $index) {
+                    <button
+                      (click)="currentMedhaSlide.set(i)"
+                      class="w-2 h-2 rounded-full transition-all duration-300"
+                      [class.bg-accent]="currentMedhaSlide() === i"
+                      [class.w-4]="currentMedhaSlide() === i"
+                      [class.bg-frost/40]="currentMedhaSlide() !== i"
+                      [class.hover:bg-frost/70]="currentMedhaSlide() !== i"
+                      [attr.aria-label]="'Go to slide ' + (i + 1)"
+                    ></button>
+                  }
+                </div>
               </div>
             </div>
           </div>
@@ -193,9 +216,12 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
     </section>
   `,
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent implements OnInit, OnDestroy {
   visible = signal(false);
   parallaxOffset = signal(0);
+  currentMedhaSlide = signal(0);
+  medhaImages = ['medha-app-1.jpg', 'medha-app-2.jpg', 'medha-app-3.jpg', 'medha-app-4.jpg'];
+  private medhaIntervalId?: any;
 
   featuredTags = ['Go', 'Clean Architecture', 'PostgreSQL', 'PostGIS', 'Redis', 'WebSockets', 'MinIO', 'Kotlin', 'Jetpack Compose', 'Cloudflare Tunnel'];
 
@@ -258,5 +284,15 @@ export class ProjectsComponent implements OnInit {
       const el = document.querySelector('#projects');
       if (el) observer.observe(el);
     }, 100);
+
+    this.medhaIntervalId = setInterval(() => {
+      this.currentMedhaSlide.update(val => (val + 1) % this.medhaImages.length);
+    }, 3000);
+  }
+
+  ngOnDestroy() {
+    if (this.medhaIntervalId) {
+      clearInterval(this.medhaIntervalId);
+    }
   }
 }

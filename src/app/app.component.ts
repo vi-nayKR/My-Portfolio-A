@@ -13,7 +13,6 @@ import { ContactComponent } from './components/contact/contact.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ParticlesComponent } from './components/particles/particles.component';
 import { ScrollNavComponent } from './components/scroll-nav/scroll-nav.component';
-import { CursorComponent } from './components/cursor/cursor.component';
 import Lenis from 'lenis';
 
 @Component({
@@ -34,11 +33,9 @@ import Lenis from 'lenis';
     FooterComponent,
     ParticlesComponent,
     ScrollNavComponent,
-    CursorComponent,
   ],
   template: `
     <div class="noise relative">
-      <app-cursor />
       <app-scroll-nav />
       <app-particles />
       <app-navbar />

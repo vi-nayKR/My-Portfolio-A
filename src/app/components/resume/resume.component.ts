@@ -46,7 +46,7 @@ import { CommonModule } from '@angular/common';
           <!-- Embed PDF Iframe with loading states -->
           <div class="relative w-full aspect-[1/1.414] md:h-[750px] md:aspect-auto rounded-xl overflow-hidden border border-border bg-abyss">
             <iframe
-              src="https://drive.google.com/file/d/11mdOZEMuOfWKWChgJz9eLDnLmCx2rBvW/preview"
+              src="/resume.pdf"
               class="w-full h-full border-none shadow-inner"
               allow="autoplay"
               loading="lazy"
@@ -57,7 +57,7 @@ import { CommonModule } from '@angular/common';
           <!-- Buttons/Actions -->
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4 border-t border-border/60 pt-6">
             <a
-              href="https://drive.google.com/file/d/11mdOZEMuOfWKWChgJz9eLDnLmCx2rBvW/view"
+              href="/resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               class="flex items-center justify-center gap-2.5 px-6 py-3.5 w-full sm:w-auto rounded-xl bg-accent hover:bg-accent-glow text-frost font-bold text-sm transition-all duration-300 hover:shadow-lg hover:shadow-accent/25 transform hover:-translate-y-0.5 active:translate-y-0"
@@ -69,7 +69,7 @@ import { CommonModule } from '@angular/common';
             </a>
 
             <a
-              href="https://drive.google.com/uc?export=download&id=11mdOZEMuOfWKWChgJz9eLDnLmCx2rBvW"
+              href="/resume.pdf"
               download="Vinay_KR_Resume.pdf"
               class="flex items-center justify-center gap-2.5 px-6 py-3.5 w-full sm:w-auto rounded-xl border border-border hover:border-accent/40 hover:bg-surface text-frost font-bold text-sm transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
             >

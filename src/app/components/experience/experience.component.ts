@@ -54,12 +54,12 @@ import { TiltDirective } from '../../directives/tilt.directive';
                 <div class="absolute left-6 md:left-1/2 w-3 h-3 rounded-full bg-accent border-2 border-void -translate-x-1/2 mt-6 z-10 animate-pulse-glow"></div>
 
                 <!-- Date badge (desktop) -->
-                <div class="hidden md:flex w-[calc(50%-2rem)] items-start"
+                <div class="hidden md:flex w-[calc(50%-2rem)] items-stretch"
                      [class.justify-end]="i % 2 === 0"
                      [class.justify-start]="i % 2 === 1"
                      [class.pr-8]="i % 2 === 0"
                      [class.pl-8]="i % 2 === 1">
-                  <div class="flex flex-col" [class.items-end]="i % 2 === 0" [class.items-start]="i % 2 === 1">
+                  <div class="flex flex-col w-full h-full" [class.items-end]="i % 2 === 0" [class.items-start]="i % 2 === 1">
                     <div class="text-right" [class.text-left]="i % 2 === 1">
                       <span class="text-sm font-mono text-accent">{{ exp.period }}</span>
                       <p class="text-xs text-muted mt-1">{{ exp.location }}</p>
@@ -70,7 +70,7 @@ import { TiltDirective } from '../../directives/tilt.directive';
                         appTilt
                         [maxTilt]="6"
                         [scale]="1.03"
-                        [class]="'mt-4 w-full max-w-[280px] overflow-hidden rounded-xl border border-border/30 bg-void/50 group/exp-img shadow-lg cursor-pointer ' + (exp.aspect || 'aspect-[4/3]')"
+                        [class]="'mt-4 w-full ' + (exp.maxWidth || 'max-w-[320px]') + ' overflow-hidden rounded-xl border border-border/30 bg-void/50 group/exp-img shadow-lg cursor-pointer ' + (exp.aspect === 'aspect-[1/2]' ? 'md:aspect-auto flex-1 min-h-0 aspect-[1/2]' : (exp.aspect || 'aspect-[16/9]'))"
                       >
                         <img
                           [src]="exp.image"
@@ -161,6 +161,7 @@ export class ExperienceComponent implements OnInit {
       tags: ['Node.js', 'TypeScript', 'Angular', 'RxJS', 'Auth0', 'Redis', 'TypeORM', 'Web3'],
       image: 'crypto-custody.png',
       aspect: 'aspect-[1/2]',
+      maxWidth: 'max-w-[320px]',
     },
     {
       role: 'Senior Associate Software Engineer',
@@ -177,6 +178,7 @@ export class ExperienceComponent implements OnInit {
       tags: ['Angular', 'React', 'ASP.NET Core', 'C#', 'SQL Server', 'Cypress', 'TypeScript'],
       image: 'slot-machine.png',
       aspect: 'aspect-[1/2]',
+      maxWidth: 'max-w-[320px]',
     },
     {
       role: 'Full Stack Intern',
@@ -190,6 +192,7 @@ export class ExperienceComponent implements OnInit {
       tags: ['C#', 'Angular', 'ASP.NET Core', 'SQL Server'],
       image: 'roulette.png',
       aspect: 'aspect-[4/3]',
+      maxWidth: 'max-w-[320px]',
     },
   ];
 
