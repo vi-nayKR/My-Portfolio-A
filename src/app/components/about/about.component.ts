@@ -49,20 +49,6 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
               Deep expertise in security-focused authentication (RBAC, JWT, 2FA), PostgreSQL/PostGIS, and containerized DevOps pipelines.
             </p>
 
-            <!-- Quick stats -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-              @for (stat of stats; track stat.label) {
-                <div
-                  appTilt
-                  [maxTilt]="12"
-                  [scale]="1.05"
-                  class="text-center p-4 rounded-xl apple-glass hover:border-accent/40 transition-colors duration-300"
-                >
-                  <div class="text-3xl font-display font-bold gradient-text">{{ stat.value }}</div>
-                  <div class="text-xs text-muted mt-1 leading-tight">{{ stat.label }}</div>
-                </div>
-              }
-            </div>
           </div>
 
           <!-- Right: Info cards -->
@@ -119,12 +105,6 @@ import { SafeHtmlPipe } from '../../pipes/safe-html.pipe';
 export class AboutComponent implements OnInit {
   visible = signal(false);
   parallaxOffset = signal(0);
-
-  stats = [
-    { value: '3+', label: 'Years Experience' },
-    { value: '750+', label: 'Cypress Tests' },
-    { value: '15+', label: 'APIs Built' },
-  ];
 
   cards = [
     {

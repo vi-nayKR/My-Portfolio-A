@@ -192,7 +192,7 @@ export class CertificationsComponent implements OnInit {
       icon: 'linkedin'
     },
     {
-      title: 'Docker Fondations Professional certificate',
+      title: 'Docker Foundations Professional Certificate',
       issuer: 'LinkedIn Learning',
       date: '2025',
       image: '/certificates/typescript_advanced.png',

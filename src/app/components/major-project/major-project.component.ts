@@ -112,12 +112,12 @@ import { TiltDirective } from '../../directives/tilt.directive';
                     <h5 class="text-xs font-mono text-accent uppercase tracking-widest mb-4">Project Presenters</h5>
                     <div class="space-y-3">
                       @for (member of presenters; track member.usn) {
-                        <div class="flex items-center justify-between py-2 border-b border-border/10">
-                          <div>
+                        <div class="flex items-center justify-between gap-3 py-2 border-b border-border/10">
+                          <div class="min-w-0">
                             <p class="text-sm font-semibold text-frost">{{ member.name }}</p>
                             <p class="text-[10px] text-muted font-mono">{{ member.usn }}</p>
                           </div>
-                          <span class="text-[10px] font-mono bg-accent/10 text-accent px-2 py-0.5 rounded">{{ member.role }}</span>
+                          <span class="text-[10px] font-mono bg-accent/10 text-accent px-2 py-0.5 rounded shrink-0">{{ member.role }}</span>
                         </div>
                       }
                     </div>
