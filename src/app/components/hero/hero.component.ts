@@ -1,7 +1,6 @@
 import { Component, HostListener, signal, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TiltDirective } from '../../directives/tilt.directive';
-import { PHOTO_BASE64 } from './photo-data';
 
 @Component({
   selector: 'app-hero',
@@ -161,7 +160,7 @@ import { PHOTO_BASE64 } from './photo-data';
   `,
 })
 export class HeroComponent implements OnDestroy {
-  photoUrl = signal<string>(PHOTO_BASE64);
+  photoUrl = signal<string>('/profile-photo.webp');
   parallaxY = signal(0);
   mouseX = signal(0);
   mouseY = signal(0);

@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy, HostListener, PLATFORM_ID, Inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import * as THREE from 'three';
+import type * as THREE from 'three';
 
 @Component({
   selector: 'app-model3d',
@@ -37,7 +37,7 @@ export class Model3dComponent implements AfterViewInit, OnDestroy {
 
   private renderer!: THREE.WebGLRenderer;
   private scene!: THREE.Scene;
-  private camera!: THREE.Camera;
+  private camera!: THREE.PerspectiveCamera;
   private modelGroup!: THREE.Group;
   private gridHelper!: THREE.GridHelper;
   private ring1!: THREE.Line;
@@ -50,6 +50,7 @@ export class Model3dComponent implements AfterViewInit, OnDestroy {
   private mouseY = 0;
 
   rotationZStr = '0.00';
+  private destroyed = false;
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
@@ -59,23 +60,26 @@ export class Model3dComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (!isPlatformBrowser(this.platformId)) return;
-    this.initThree();
+    void this.initThree();
   }
 
-  private initThree() {
+  private async initThree() {
+    // three.js is loaded on demand so it ships as a separate chunk
+    const T = await import('three');
+    if (this.destroyed) return;
     const canvas = this.canvasRef.nativeElement;
     const width = canvas.clientWidth;
     const height = canvas.clientHeight;
 
     // 1. Scene
-    this.scene = new THREE.Scene();
+    this.scene = new T.Scene();
 
     // 2. Camera
-    this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    this.camera = new T.PerspectiveCamera(45, width / height, 0.1, 100);
     this.camera.position.z = 8;
 
     // 3. Renderer
-    this.renderer = new THREE.WebGLRenderer({
+    this.renderer = new T.WebGLRenderer({
       canvas: canvas,
       alpha: true,
       antialias: true
@@ -84,60 +88,60 @@ export class Model3dComponent implements AfterViewInit, OnDestroy {
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
     // 4. Model Group
-    this.modelGroup = new THREE.Group();
+    this.modelGroup = new T.Group();
     this.scene.add(this.modelGroup);
 
     // 5. Engineering Wireframe Polyhedron
     // Let's create an Icosahedron (geodesic structure)
-    const geometry = new THREE.IcosahedronGeometry(2.0, 1);
+    const geometry = new T.IcosahedronGeometry(2.0, 1);
     
     // Wireframe Mesh
-    const wireframeMaterial = new THREE.MeshBasicMaterial({
+    const wireframeMaterial = new T.MeshBasicMaterial({
       color: 0xff6b00, // Accent Orange
       wireframe: true,
       transparent: true,
       opacity: 0.25
     });
-    const mesh = new THREE.Mesh(geometry, wireframeMaterial);
+    const mesh = new T.Mesh(geometry, wireframeMaterial);
     this.modelGroup.add(mesh);
 
     // Glow Points (Vertices)
-    const pointsMaterial = new THREE.PointsMaterial({
+    const pointsMaterial = new T.PointsMaterial({
       color: 0xffaa66, // Light orange
       size: 0.08,
       transparent: true,
       opacity: 0.8
     });
-    const points = new THREE.Points(geometry, pointsMaterial);
+    const points = new T.Points(geometry, pointsMaterial);
     this.modelGroup.add(points);
 
     // 6. Gyroscopic Orbit Rings
     // Ring 1 (Horizontal Orbit)
-    const ringGeom1 = new THREE.BufferGeometry();
+    const ringGeom1 = new T.BufferGeometry();
     const pointsRing1: THREE.Vector3[] = [];
     for (let i = 0; i <= 64; i++) {
       const theta = (i / 64) * Math.PI * 2;
-      pointsRing1.push(new THREE.Vector3(Math.cos(theta) * 2.8, 0, Math.sin(theta) * 2.8));
+      pointsRing1.push(new T.Vector3(Math.cos(theta) * 2.8, 0, Math.sin(theta) * 2.8));
     }
     ringGeom1.setFromPoints(pointsRing1);
-    const ringMat1 = new THREE.LineBasicMaterial({ color: 0xff6b00, transparent: true, opacity: 0.15 });
-    this.ring1 = new THREE.Line(ringGeom1, ringMat1);
+    const ringMat1 = new T.LineBasicMaterial({ color: 0xff6b00, transparent: true, opacity: 0.15 });
+    this.ring1 = new T.Line(ringGeom1, ringMat1);
     this.modelGroup.add(this.ring1);
 
     // Ring 2 (Vertical Orbit)
-    const ringGeom2 = new THREE.BufferGeometry();
+    const ringGeom2 = new T.BufferGeometry();
     const pointsRing2: THREE.Vector3[] = [];
     for (let i = 0; i <= 64; i++) {
       const theta = (i / 64) * Math.PI * 2;
-      pointsRing2.push(new THREE.Vector3(0, Math.cos(theta) * 2.8, Math.sin(theta) * 2.8));
+      pointsRing2.push(new T.Vector3(0, Math.cos(theta) * 2.8, Math.sin(theta) * 2.8));
     }
     ringGeom2.setFromPoints(pointsRing2);
-    const ringMat2 = new THREE.LineBasicMaterial({ color: 0xff9242, transparent: true, opacity: 0.15 });
-    this.ring2 = new THREE.Line(ringGeom2, ringMat2);
+    const ringMat2 = new T.LineBasicMaterial({ color: 0xff9242, transparent: true, opacity: 0.15 });
+    this.ring2 = new T.Line(ringGeom2, ringMat2);
     this.modelGroup.add(this.ring2);
 
     // 7. Coordinate Blueprint Grid
-    this.gridHelper = new THREE.GridHelper(10, 10, 0xff6b00, 0x1a1a24);
+    this.gridHelper = new T.GridHelper(10, 10, 0xff6b00, 0x1a1a24);
     this.gridHelper.position.y = -2.5;
     // Set grid transparency
     if (Array.isArray(this.gridHelper.material)) {
@@ -213,6 +217,7 @@ export class Model3dComponent implements AfterViewInit, OnDestroy {
   };
 
   ngOnDestroy() {
+    this.destroyed = true;
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
     }
